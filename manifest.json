@@ -1,0 +1,22 @@
+{
+  "name": "Hunggg NewTab",
+  "manifest_version": 3,
+  "version": "1.0.0",
+  "version_name": "v1.0.0 stable Hunggg",
+  "description": "Custom new tab page with clock, search, music, weather, and quick links.",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "geolocation"
+  ],
+  "host_permissions": [
+    "https://api.open-meteo.com/*"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
