@@ -4,11 +4,25 @@
 <meta charset="UTF-8">
 <title>Hunggg NewTab</title>
 <meta name="theme-color" content="#000000">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
+:root{
+  --ctp-base:#1e1e2e;
+  --ctp-surface:#313244;
+  --ctp-text:#cdd6f4;
+  --ctp-blue:#89b4fa;
+  --ctp-pink:#f5c2e7;
+  --glass-bg:rgba(30,30,46,0.34);
+  --glass-border:rgba(205,214,244,0.22);
+}
+
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-body{overflow:hidden;color:white;background:black;}
+body{
+  overflow:hidden;
+  color:var(--ctp-text);
+  background:var(--ctp-base);
+}
 
 /* Video */
 video{
@@ -43,9 +57,86 @@ body.gpu-boost .poster-bg{
 .overlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.45);
-  backdrop-filter:blur(8px);
+  background:
+    radial-gradient(circle at 18% 14%, rgba(137,180,250,0.22) 0%, transparent 35%),
+    radial-gradient(circle at 82% 78%, rgba(245,194,231,0.2) 0%, transparent 35%),
+    rgba(0,0,0,0.45);
+  backdrop-filter:blur(10px);
   z-index:-1;
+}
+
+/* Intro screen */
+.intro-screen{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:radial-gradient(circle at center, rgba(49,50,68,0.65) 0%, rgba(17,17,27,0.9) 100%);
+  backdrop-filter:blur(14px);
+  transition:opacity 0.65s ease, transform 0.65s ease, visibility 0.65s ease;
+}
+
+.intro-screen.exit{
+  opacity:0;
+  transform:scale(1.04);
+  visibility:hidden;
+}
+
+.intro-card{
+  text-align:center;
+  padding:30px 40px;
+  border-radius:22px;
+  border:1px solid var(--glass-border);
+  background:linear-gradient(145deg, rgba(30,30,46,0.72), rgba(49,50,68,0.45));
+  box-shadow:0 20px 45px rgba(0,0,0,0.35);
+}
+
+.intro-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:46px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  background:linear-gradient(100deg, var(--ctp-blue), var(--ctp-pink));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.intro-sub{
+  margin-top:12px;
+  font-size:14px;
+  opacity:0.86;
+  animation:introPulse 1.35s ease-in-out infinite;
+}
+
+@keyframes introPulse{
+  0%{opacity:0.45;}
+  50%{opacity:1;}
+  100%{opacity:0.45;}
+}
+
+body.intro-active .weather,
+body.intro-active .credit-btn,
+body.intro-active .gpu-btn,
+body.intro-active .utility-stack,
+body.intro-active .center,
+body.intro-active .music-widget,
+body.intro-active .quick-links{
+  opacity:0;
+  transform:translateY(8px);
+  pointer-events:none;
+}
+
+.weather,
+.credit-btn,
+.gpu-btn,
+.utility-stack,
+.center,
+.music-widget,
+.quick-links{
+  transition:opacity 0.4s ease, transform 0.4s ease;
 }
 
 /* Center */
@@ -61,28 +152,32 @@ body.gpu-boost .poster-bg{
 
 /* Clock */
 .clock{
-  font-size:80px;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:86px;
   font-weight:700;
-  letter-spacing:3px;
+  letter-spacing:2px;
+  text-shadow:0 6px 25px rgba(0,0,0,0.45);
 }
 
 /* Greeting */
 .greeting{
-  font-size:22px;
+  font-size:23px;
   font-weight:500;
-  opacity:0.95;
+  opacity:0.96;
 }
 
 /* Fun text */
 .fun-text{
-  font-size:16px;
-  opacity:0.8;
+  font-size:15px;
+  opacity:0.86;
+  color:rgba(205,214,244,0.9);
 }
 
 /* Search */
 .search-line{
-  width:450px;
+  width:min(560px,76vw);
   position:relative;
+  padding:0;
 }
 
 .search-line input{
@@ -103,7 +198,9 @@ body.gpu-boost .poster-bg{
   bottom:0;
   width:100%;
   height:2px;
-  background:rgba(255,255,255,0.7);
+  background:linear-gradient(90deg, var(--ctp-blue), var(--ctp-pink));
+  transform:scaleX(1);
+  transform-origin:center;
 }
 
 .search-line input::placeholder{
@@ -115,10 +212,12 @@ body.gpu-boost .poster-bg{
   position:fixed;
   top:30px;
   right:40px;
-  background:rgba(255,255,255,0.1);
-  backdrop-filter:blur(15px);
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  box-shadow:0 10px 28px rgba(0,0,0,0.22);
   padding:15px 20px;
-  border-radius:15px;
+  border-radius:16px;
   font-size:14px;
   min-width:160px;
   text-align:right;
@@ -134,10 +233,12 @@ body.gpu-boost .poster-bg{
   position:fixed;
   bottom:30px;
   left:40px;
-  background:rgba(255,255,255,0.1);
-  backdrop-filter:blur(15px);
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  box-shadow:0 10px 28px rgba(0,0,0,0.22);
   padding:12px 18px;
-  border-radius:15px;
+  border-radius:16px;
   display:flex;
   align-items:center;
   gap:10px;
@@ -175,13 +276,13 @@ body.gpu-boost .poster-bg{
   gap:8px;
   min-width:88px;
   padding:10px 14px;
-  border-radius:12px;
-  background:rgba(255,255,255,0.12);
-  backdrop-filter:blur(12px);
+  border-radius:14px;
+  background:rgba(30,30,46,0.38);
+  backdrop-filter:blur(14px);
   color:white;
   text-decoration:none;
   font-size:13px;
-  border:1px solid rgba(255,255,255,0.2);
+  border:1px solid var(--glass-border);
   transition:background 0.2s ease, transform 0.2s ease;
 }
 
@@ -194,7 +295,7 @@ body.gpu-boost .poster-bg{
 }
 
 .quick-link:hover{
-  background:rgba(255,255,255,0.22);
+  background:rgba(137,180,250,0.26);
   transform:translateY(-2px);
 }
 
@@ -209,10 +310,12 @@ body.gpu-boost .poster-bg{
   position:fixed;
   top:30px;
   left:40px;
-  background:rgba(255,255,255,0.1);
-  backdrop-filter:blur(15px);
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  box-shadow:0 10px 26px rgba(0,0,0,0.2);
   padding:10px 14px;
-  border-radius:12px;
+  border-radius:14px;
   cursor:pointer;
   font-size:14px;
 }
@@ -221,19 +324,98 @@ body.gpu-boost .poster-bg{
   position:fixed;
   top:76px;
   left:40px;
-  background:rgba(255,255,255,0.1);
-  backdrop-filter:blur(15px);
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px);
   padding:10px 14px;
-  border-radius:12px;
+  border-radius:14px;
   cursor:pointer;
   font-size:12px;
-  border:1px solid rgba(255,255,255,0.25);
+  border:1px solid var(--glass-border);
   color:white;
+  box-shadow:0 10px 26px rgba(0,0,0,0.2);
 }
 
 .gpu-btn.active{
   background:rgba(137,180,250,0.28);
   border-color:rgba(137,180,250,0.75);
+}
+
+/* Utility widgets */
+.utility-stack{
+  position:fixed;
+  top:126px;
+  left:40px;
+  width:260px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.widget-card{
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  box-shadow:0 10px 26px rgba(0,0,0,0.2);
+  border-radius:14px;
+  padding:12px 14px;
+}
+
+.widget-title{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  opacity:0.8;
+  margin-bottom:6px;
+}
+
+.date-main{
+  font-size:18px;
+  font-weight:600;
+}
+
+.date-sub{
+  font-size:12px;
+  opacity:0.8;
+}
+
+.pomodoro-time{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:28px;
+  font-weight:700;
+  line-height:1.1;
+  margin-bottom:8px;
+}
+
+.pomodoro-actions{
+  display:flex;
+  gap:8px;
+}
+
+.pomodoro-actions button{
+  border:1px solid var(--glass-border);
+  border-radius:10px;
+  background:rgba(137,180,250,0.16);
+  color:var(--ctp-text);
+  padding:6px 8px;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.notes-input{
+  width:100%;
+  min-height:72px;
+  resize:vertical;
+  border:1px solid var(--glass-border);
+  border-radius:10px;
+  background:rgba(30,30,46,0.45);
+  color:var(--ctp-text);
+  padding:8px 10px;
+  outline:none;
+  font-size:13px;
+}
+
+.notes-input::placeholder{
+  color:rgba(205,214,244,0.55);
 }
 
 /* Credit panel */
@@ -255,21 +437,44 @@ body.gpu-boost .poster-bg{
 }
 
 .credit-content{
-  background:rgba(255,255,255,0.1);
+  background:linear-gradient(145deg, rgba(30,30,46,0.7), rgba(49,50,68,0.45));
   backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
   padding:40px;
   border-radius:20px;
   text-align:center;
 }
+
+@media (max-width: 768px){
+  .clock{font-size:58px;}
+  .greeting{font-size:18px;}
+  .fun-text{font-size:13px;}
+  .weather{top:18px;right:16px;padding:11px 13px;min-width:130px;}
+  .credit-btn{top:18px;left:16px;}
+  .gpu-btn{top:60px;left:16px;font-size:11px;padding:8px 12px;}
+  .utility-stack{top:98px;left:16px;width:210px;gap:10px;}
+  .pomodoro-time{font-size:24px;}
+  .music-widget{left:16px;bottom:18px;padding:10px 12px;}
+  .quick-links{right:16px;bottom:18px;max-width:58vw;}
+  .quick-link{min-width:74px;padding:8px 10px;font-size:12px;}
+  .intro-title{font-size:34px;}
+  .intro-card{padding:22px 24px;}
+}
 </style>
 </head>
 
-<body>
+<body class="intro-active">
 
 <video autoplay muted loop poster="poster.jpg">
   <source src="wallpaper.mp4" type="video/mp4">
 </video>
 <img class="poster-bg" src="poster.jpg" alt="Poster background">
+<div class="intro-screen" id="introScreen" aria-label="Intro">
+  <div class="intro-card">
+    <div class="intro-title">Hunggg NewTab</div>
+    <div class="intro-sub">Press Enter To Continue</div>
+  </div>
+</div>
 
 <div class="overlay"></div>
 
@@ -277,6 +482,28 @@ body.gpu-boost .poster-bg{
 
 <div class="credit-btn" id="creditBtn">ℹ</div>
 <button class="gpu-btn" id="gpuBtn" type="button">GPU Boost: Off</button>
+<div class="utility-stack">
+  <div class="widget-card date-widget">
+    <div class="widget-title">Today</div>
+    <div class="date-main" id="dateMain">--</div>
+    <div class="date-sub" id="dateSub">--</div>
+  </div>
+
+  <div class="widget-card pomodoro-widget">
+    <div class="widget-title">Pomodoro</div>
+    <div class="pomodoro-time" id="pomodoroTime">25:00</div>
+    <div class="pomodoro-actions">
+      <button id="pomodoroStart" type="button">Start</button>
+      <button id="pomodoroPause" type="button">Pause</button>
+      <button id="pomodoroReset" type="button">Reset</button>
+    </div>
+  </div>
+
+  <div class="widget-card notes-widget">
+    <div class="widget-title">Quick Notes</div>
+    <textarea id="notesInput" class="notes-input" placeholder="Write something..."></textarea>
+  </div>
+</div>
 
 <div class="center">
   <div class="clock" id="clock"></div>
