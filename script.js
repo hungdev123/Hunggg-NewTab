@@ -27,9 +27,105 @@ updateTime();
 updateGreeting();
 setInterval(updateGreeting,60000);
 
+/* Date widget */
+const dateMain = document.getElementById("dateMain");
+const dateSub = document.getElementById("dateSub");
+
+function updateDateWidget(){
+  const now = new Date();
+  dateMain.textContent = now.toLocaleDateString("en-US", { weekday: "long" });
+  dateSub.textContent = now.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+updateDateWidget();
+setInterval(updateDateWidget,60000);
+
+/* Pomodoro widget */
+const pomodoroTime = document.getElementById("pomodoroTime");
+const pomodoroStart = document.getElementById("pomodoroStart");
+const pomodoroPause = document.getElementById("pomodoroPause");
+const pomodoroReset = document.getElementById("pomodoroReset");
+const POMODORO_DEFAULT_SECONDS = 25 * 60;
+let pomodoroRemaining = POMODORO_DEFAULT_SECONDS;
+let pomodoroTimerId = null;
+
+function renderPomodoro(){
+  const mm = String(Math.floor(pomodoroRemaining / 60)).padStart(2, "0");
+  const ss = String(pomodoroRemaining % 60).padStart(2, "0");
+  pomodoroTime.textContent = `${mm}:${ss}`;
+}
+
+function stopPomodoro(){
+  if(!pomodoroTimerId) return;
+  clearInterval(pomodoroTimerId);
+  pomodoroTimerId = null;
+}
+
+function startPomodoro(){
+  if(pomodoroTimerId) return;
+  pomodoroTimerId = setInterval(()=>{
+    if(pomodoroRemaining <= 0){
+      stopPomodoro();
+      return;
+    }
+    pomodoroRemaining -= 1;
+    renderPomodoro();
+    if(pomodoroRemaining <= 0){
+      stopPomodoro();
+      pomodoroTime.textContent = "Done!";
+    }
+  }, 1000);
+}
+
+pomodoroStart.addEventListener("click", startPomodoro);
+pomodoroPause.addEventListener("click", stopPomodoro);
+pomodoroReset.addEventListener("click", ()=>{
+  stopPomodoro();
+  pomodoroRemaining = POMODORO_DEFAULT_SECONDS;
+  renderPomodoro();
+});
+renderPomodoro();
+
+/* Quick notes widget */
+const notesInput = document.getElementById("notesInput");
+const NOTES_KEY = "hunggg_quick_notes_v1";
+
+notesInput.value = localStorage.getItem(NOTES_KEY) || "";
+notesInput.addEventListener("input", ()=>{
+  localStorage.setItem(NOTES_KEY, notesInput.value);
+});
+
+/* Intro */
+const introScreen = document.getElementById("introScreen");
+let introActive = !!introScreen;
+
+function closeIntro(){
+  if(!introScreen || !introActive) return;
+  introActive = false;
+  introScreen.classList.add("exit");
+  setTimeout(()=>{
+    document.body.classList.remove("intro-active");
+    introScreen.remove();
+    const search = document.getElementById("searchInput");
+    if(search) search.focus();
+  }, 650);
+}
+
+document.addEventListener("keydown", (event)=>{
+  if(!introActive) return;
+  if(event.key !== "Enter") return;
+  event.preventDefault();
+  event.stopPropagation();
+  closeIntro();
+}, true);
+
 /* Search */
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("keydown", (event)=>{
+  if(introActive){
+    event.preventDefault();
+    return;
+  }
   if(event.key === "Enter"){
     window.location = "https://www.google.com/search?q=" + encodeURIComponent(searchInput.value);
   }
