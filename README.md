@@ -11,6 +11,7 @@ Custom Chrome New Tab extension (Manifest V3) with:
 - Quick links (Facebook, YouTube, TikTok, Reddit)
 - Add custom links (+)
 - GPU Boost toggle (hide video, use poster)
+- More things!
 
 ## Run / Activate in Chrome
 1. Open `chrome://extensions`.
