@@ -1,3 +1,6 @@
+const USER_NAME_KEY = "hunggg_user_name_v1";
+let userName = (localStorage.getItem(USER_NAME_KEY) || "").trim();
+
 /* Clock */
 function updateTime(){
   const now = new Date();
@@ -19,6 +22,10 @@ function updateGreeting(){
     }
   }
 
+  if(userName){
+    text = `${text}, ${userName}`;
+  }
+
   document.getElementById("greeting").textContent = text;
 }
 
@@ -26,6 +33,27 @@ setInterval(updateTime,1000);
 updateTime();
 updateGreeting();
 setInterval(updateGreeting,60000);
+
+/* Name widget */
+const nameInput = document.getElementById("nameInput");
+const nameSave = document.getElementById("nameSave");
+
+function saveUserName(){
+  userName = (nameInput.value || "").trim().slice(0, 32);
+  localStorage.setItem(USER_NAME_KEY, userName);
+  nameInput.value = userName;
+  updateGreeting();
+}
+
+nameInput.value = userName;
+nameSave.addEventListener("click", saveUserName);
+nameInput.addEventListener("keydown", (event)=>{
+  if(event.key === "Enter"){
+    event.preventDefault();
+    saveUserName();
+  }
+});
+nameInput.addEventListener("blur", saveUserName);
 
 /* Date widget */
 const dateMain = document.getElementById("dateMain");
